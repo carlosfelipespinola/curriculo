@@ -133,15 +133,27 @@ var Food = function(createVector)
     };
 };
 
-var GameController = function(createVector,reset)
+var GameController = function(createVector)
 {
-    var _snake = new Snake(createVector);
-    var _food = new Food(createVector);
-    var _gameIsOver = false;
-    var _currentGameOverTextSize = 0;
-    var _maxTextSize = 36;
-    var currentScene = 0;
-    _food.randomizePostion();
+    var _snake;
+    var _food;
+    var _gameIsOver;
+    var _currentGameOverTextSize;
+    var _maxTextSize;
+    var currentScene;
+    
+
+    var _init = function()
+    {
+        _snake = new Snake(createVector);
+        _food = new Food(createVector);
+        _gameIsOver = false;
+        currentScene = 0;
+        _currentGameOverTextSize = 0;
+        _maxTextSize = 36;
+        _food.randomizePostion();
+    };
+    _init();
     
     
     var _drawScoreText = function()
@@ -169,7 +181,7 @@ var GameController = function(createVector,reset)
             text("press any key to restart",320,230);
             if(keyIsPressed)
             {
-                reset();
+                _init();
             }
         }
         var maxWidth = 213;
@@ -227,6 +239,7 @@ var GameController = function(createVector,reset)
     
     this.runGame = function()
     {
+        background(0, 0, 0);
         if(currentScene === 0)
         {
             _preGameplayScene();
@@ -241,18 +254,18 @@ var GameController = function(createVector,reset)
 var gameController;
 
 
-
 var setup = function()
 {
     frameRate(15);
     var cnv = createCanvas(640, 480);
     cnv.parent('canvas-holder');
-    gameController = new GameController(createVector,setup);
+    gameController = new GameController(createVector);
     
 };
 
 function draw()
 {
     background(0, 0, 0);
-    gameController.runGame();
+    if(gameController)
+        gameController.runGame();
 }
